@@ -1,0 +1,26 @@
+docker build -t <dockerhub-username>/flask-app:latest .
+
+# Test locally → visit http://localhost:5000
+docker run -d -p 5000:5000 <dockerhub-username>/flask-app:latest
+
+# Login and push
+docker login
+docker push <dockerhub-username>/flask-app:latest
+
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . .
+EXPOSE 5000
+CMD ["python", "app.py"]
+
+docker build -t flask-container .
+docker run -d -p 5000:5000 --name myflask flask-container
+docker ps
+
+docker run -it flask-container
+docker ps-a
+
+
